@@ -20,7 +20,7 @@ public class Task {
 
     @NotBlank(message = "Title is required") // Java não aceita vazio, nula, ou só espaços
     @Column(nullable = false) // Banco não aceita null
-    private String task;
+    private String title;
 
     @Column(columnDefinition = "TEXT") // Defini o tipo de valor que o banco aceita como TEXT
     private String description;
