@@ -165,6 +165,33 @@ COMPLETED    → Tarefa concluída
 
 ---
 
+## 🖥️ Interface Web
+
+O projeto conta com uma interface web moderna integrada à API, acessível diretamente pelo navegador.
+
+### Como acessar
+
+Com a aplicação rodando, abra no navegador:
+```
+http://localhost:8080/index.html
+```
+
+### Funcionalidades da interface
+
+- Criar tarefas com título, descrição e status
+- Marcar tarefas como concluídas com um clique
+- Editar título e status inline
+- Deletar tarefas
+- Filtrar por status (Todas, Pendentes, Em progresso, Concluídas)
+- Métricas em tempo real por status
+- Indicador de conexão com a API
+
+### Tecnologias
+
+HTML5, CSS3 e JavaScript puro — sem frameworks externos. Servido diretamente pelo Spring Boot via `src/main/resources/static/`.
+
+---
+
 ## 🌿 Git Flow utilizado
 
 ```
@@ -172,9 +199,10 @@ main
  └── feature/task-entity
  └── feature/task-service-dto
  └── feature/task-controller
+ └── feature/frontend
 ```
 
-Cada funcionalidade foi desenvolvida em uma branch separada e integrada à `main` via Pull Request.
+Cada funcionalidade foi desenvolvida em uma branch separada e integrada à `main` via Pull Request
 
 ---
 
