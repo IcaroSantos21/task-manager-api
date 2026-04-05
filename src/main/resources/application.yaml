@@ -2,16 +2,18 @@ spring:
   application:
     name: taskmanager
   datasource:
-    url: jdbc:mysql://localhost:3306/taskmanager_db
-    username: root
-    password: 131206ic
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3306/taskmanager_db}
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:131206ic}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
 
+server:
+  port: ${PORT:8080}
