@@ -202,7 +202,7 @@ main
  └── feature/frontend
 ```
 
-Cada funcionalidade foi desenvolvida em uma branch separada e integrada à `main` via Pull Request.
+Cada funcionalidade foi desenvolvida em uma branch separada e integrada à `main` via Pull Request
 
 ---
 
