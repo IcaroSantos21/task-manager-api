@@ -1,0 +1,9 @@
+com\icaro\taskmanager\controller\TaskController.class
+com\icaro\taskmanager\service\TaskService.class
+com\icaro\taskmanager\repository\TaskRepository.class
+com\icaro\taskmanager\TaskmanagerApplication.class
+com\icaro\taskmanager\dto\TaskRequestDTO.class
+com\icaro\taskmanager\model\Task.class
+com\icaro\taskmanager\model\TaskStatus.class
+com\icaro\taskmanager\dto\TaskResponseDTO.class
+com\icaro\taskmanager\exception\GlobalExceptionHandler.class
