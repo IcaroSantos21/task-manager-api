@@ -1,0 +1,9 @@
+C:\Users\icaro\workspaces\workspace_java\taskmanager\src\main\java\com\icaro\taskmanager\controller\TaskController.java
+C:\Users\icaro\workspaces\workspace_java\taskmanager\src\main\java\com\icaro\taskmanager\dto\TaskRequestDTO.java
+C:\Users\icaro\workspaces\workspace_java\taskmanager\src\main\java\com\icaro\taskmanager\dto\TaskResponseDTO.java
+C:\Users\icaro\workspaces\workspace_java\taskmanager\src\main\java\com\icaro\taskmanager\exception\GlobalExceptionHandler.java
+C:\Users\icaro\workspaces\workspace_java\taskmanager\src\main\java\com\icaro\taskmanager\model\Task.java
+C:\Users\icaro\workspaces\workspace_java\taskmanager\src\main\java\com\icaro\taskmanager\model\TaskStatus.java
+C:\Users\icaro\workspaces\workspace_java\taskmanager\src\main\java\com\icaro\taskmanager\repository\TaskRepository.java
+C:\Users\icaro\workspaces\workspace_java\taskmanager\src\main\java\com\icaro\taskmanager\service\TaskService.java
+C:\Users\icaro\workspaces\workspace_java\taskmanager\src\main\java\com\icaro\taskmanager\TaskmanagerApplication.java
