@@ -14,5 +14,10 @@ spring:
     enabled: true
     locations: classpath:db/migration
 
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
 server:
   port: ${PORT:8080}

@@ -23,9 +23,6 @@
 hs_err_pid*
 replay_pid*
 
-# environments
-/src/main/resources/application-prod.yaml
-
 # Machine files
 .idea
 target
