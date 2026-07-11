@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tasks") // Definindo a rota base
+@RequestMapping("/tasks") // Definindo a rota base
 @RequiredArgsConstructor // Criando automaticamente o construtor como final
 public class TaskController {
 
