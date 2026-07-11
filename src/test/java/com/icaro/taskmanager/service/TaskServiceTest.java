@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -138,6 +139,76 @@ class TaskServiceTest {
         mockSecurityContext("joazinho@gmail.com");
 
         assertThrows(RuntimeException.class, () -> taskService.findById(1L));
+    }
+
+    @Test
+    void findAll_ReturnUserTasks() {
+        when(taskRepository.findByUserEmail(anyString())).thenReturn(List.of(entity));
+
+        mockSecurityContext("icaro@gmail.com");
+
+        var result = taskService.findAll();
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("Estudar Spring", result.get(0).getTitle());
+    }
+
+    @Test
+    void update_ValidInput_ReturnsUpdatedTask() {
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(entity));
+        dto.setStatus(TaskStatus.IN_PROGRESS);
+        entity.setStatus(dto.getStatus());
+        when(taskRepository.save(any())).thenReturn(entity);
+        mockSecurityContext("icaro@gmail.com");
+
+        var result = taskService.update(1L, dto);
+
+        assertNotNull(result);
+        assertEquals("Estudar Spring", result.getTitle());
+        assertEquals(TaskStatus.IN_PROGRESS, result.getStatus());
+    }
+
+    @Test
+    void update_TaskNotFound_ThrowsRuntimeException() {
+        when(taskRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> taskService.update(1L, dto));
+    }
+
+    @Test
+    void update_AccessDenied_ThrowsRuntimeException() {
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(entity));
+
+        mockSecurityContext("joazinho@gmail.com");
+
+        assertThrows(RuntimeException.class, () -> taskService.update(1L, dto));
+    }
+
+    @Test
+    void delete_ValidId_DeletesTask() {
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(entity));
+
+        mockSecurityContext("icaro@gmail.com");
+
+        taskService.delete(1L);
+        verify(taskRepository).deleteById(1L);
+    }
+
+    @Test
+    void delete_TaskNotFound_ThrowsRuntimeException() {
+        when(taskRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> taskService.delete(1L));
+    }
+
+    @Test
+    void delete_AccessDenied_ThrowsRuntimeExceptions() {
+        when(taskRepository.findById(1L)).thenReturn(Optional.of(entity));
+
+        mockSecurityContext("joazinho@gmail.com");
+
+        assertThrows(RuntimeException.class, () -> taskService.delete(1L));
     }
 
     private void mockSecurityContext(String email) {
