@@ -1,31 +1,43 @@
 # 📝 Task Manager API
 
-> REST API para gerenciamento de tarefas, desenvolvida com Java e Spring Boot.
+> API REST completa para gerenciamento de tarefas com autenticação JWT, interface web responsiva e deploy em produção.
 
-![Java](https://img.shields.io/badge/Java-17-orange?style=flat-square&logo=java)
+![Java](https://img.shields.io/badge/Java-21-orange?style=flat-square&logo=java)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.13-green?style=flat-square&logo=springboot)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=flat-square&logo=mysql)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-blue?style=flat-square&logo=postgresql)
+![Flyway](https://img.shields.io/badge/Flyway-Migrations-CC0200?style=flat-square&logo=flyway)
+![JWT](https://img.shields.io/badge/Auth-JWT-black?style=flat-square&logo=jsonwebtokens)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat-square&logo=docker)
 ![Maven](https://img.shields.io/badge/Maven-3.9-red?style=flat-square&logo=apachemaven)
-![Status](https://img.shields.io/badge/Status-Conclu%C3%ADdo-brightgreen?style=flat-square)
+![Deploy](https://img.shields.io/badge/Deploy-Render-46E3B7?style=flat-square&logo=render)
+
+🔗 **[Ver aplicação em produção](https://task-manager-api-k716.onrender.com)**
 
 ---
 
 ## 📌 Sobre o projeto
 
-API RESTful para criação e gerenciamento de tarefas com controle de status. O projeto foi desenvolvido com foco em boas práticas de desenvolvimento backend, seguindo arquitetura em camadas, design patterns e versionamento com Git Flow.
+API RESTful para criação e gerenciamento de tarefas pessoais, com autenticação via **JWT** e isolamento de dados por usuário. Cada usuário gerencia apenas as suas próprias tarefas — nenhum dado vaza entre contas.
+
+O projeto foi desenvolvido com foco em boas práticas de backend: arquitetura em camadas, DTOs, tratamento global de erros, versionamento de schema com Flyway, containerização com Docker e deploy contínuo no Render.
+
+Conta também com uma **interface web responsiva** servida pela própria API, com suporte a dark/light mode e navegação mobile.
 
 ---
 
 ## 🚀 Funcionalidades
 
-- ✅ Criar tarefa
-- ✅ Listar todas as tarefas
-- ✅ Buscar tarefa por ID
-- ✅ Atualizar tarefa
-- ✅ Deletar tarefa
-- ✅ Filtrar tarefas por status (`PENDING`, `IN_PROGRESS`, `COMPLETED`)
-- ✅ Validação de campos obrigatórios
+- ✅ Cadastro e login de usuários com JWT
+- ✅ Senhas criptografadas com BCrypt
+- ✅ Perfis de usuário (`ROLE_USER`, `ROLE_ADMIN`)
+- ✅ Tarefas isoladas por usuário autenticado
+- ✅ CRUD completo de tarefas
+- ✅ Filtro por status (`PENDING`, `IN_PROGRESS`, `COMPLETED`)
+- ✅ Validação de campos com Bean Validation
 - ✅ Tratamento global de erros
+- ✅ Migrations versionadas com Flyway
+- ✅ Interface web responsiva com dark/light mode
+- ✅ Deploy contínuo no Render
 
 ---
 
@@ -33,176 +45,228 @@ API RESTful para criação e gerenciamento de tarefas com controle de status. O 
 
 | Tecnologia | Versão |
 |---|---|
-| Java | 17 |
+| Java | 21 |
 | Spring Boot | 3.5.13 |
+| Spring Security | 3.5.13 |
 | Spring Data JPA | 3.5.13 |
-| MySQL | 8.0 |
+| PostgreSQL | 18 |
+| Flyway | Core + PostgreSQL |
+| JJWT | 0.12.6 |
 | Lombok | latest |
 | Maven | 3.9 |
+| Docker | multi-stage build |
 
 ---
 
 ## 🏗️ Arquitetura
 
-O projeto segue o padrão **Layered Architecture** com separação de responsabilidades:
+O projeto segue o padrão **Layered Architecture** com separação clara de responsabilidades:
 
 ```
 src/main/java/com/icaro/taskmanager/
 ├── controller/        → Recebe e responde requisições HTTP
 ├── service/           → Regras de negócio
-├── repository/        → Acesso ao banco de dados
-├── model/             → Entidades JPA
+├── repository/        → Acesso ao banco de dados (Spring Data JPA)
+├── model/             → Entidades JPA (UserEntity, TaskEntity, Role, TaskStatus)
 ├── dto/               → Objetos de transferência de dados
+├── security/          → JWT, filtro de autenticação e configuração do Spring Security
 └── exception/         → Tratamento global de erros
+
+src/main/resources/
+├── db/migration/      → Scripts Flyway (V1, V2, V3)
+└── static/            → Interface web (HTML, CSS, JS separados)
 ```
 
 ---
 
-## ⚙️ Como rodar o projeto
+## ⚙️ Como rodar localmente
 
 ### Pré-requisitos
-- Java 17+
-- MySQL 8.0+
-- Maven
+- Java 21+
+- PostgreSQL
+- Maven (ou use o wrapper `./mvnw`)
 
 ### 1. Clone o repositório
 ```bash
-git clone https://github.com/IcaroSantos21/taskEntity-manager-api.git
-cd taskEntity-manager-api
+git clone https://github.com/IcaroSantos21/task-manager-api.git
+cd task-manager-api
 ```
 
-### 2. Crie o banco de dados
-```sql
-CREATE DATABASE taskmanager_db;
+### 2. Configure as variáveis de ambiente
+
+```bash
+DATABASE_URL=jdbc:postgresql://localhost:5432/taskmanager_db
+DB_USER=seu_usuario
+DB_PASSWORD=sua_senha
+JWT_SECRET=chave_base64_minimo_32_bytes
+PORT=8080
 ```
 
-### 3. Configure o `application.properties`
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/taskmanager_db
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
-```
+> Gere o JWT_SECRET com: `openssl rand -base64 32`
 
-### 4. Rode a aplicação
+> As tabelas são criadas automaticamente pelo Flyway na primeira execução.
+
+### 3. Rode a aplicação
 ```bash
 ./mvnw spring-boot:run
 ```
 
 A API estará disponível em `http://localhost:8080`
 
+### 4. (Opcional) Com Docker
+```bash
+docker build -t task-manager-api .
+docker run -p 8080:8080 \
+  -e DATABASE_URL=jdbc:postgresql://host.docker.internal:5432/taskmanager_db \
+  -e DB_USER=seu_usuario \
+  -e DB_PASSWORD=sua_senha \
+  -e JWT_SECRET=sua_chave_base64 \
+  task-manager-api
+```
+
+---
+
+## 🔐 Autenticação
+
+Todas as rotas de tarefas exigem token JWT válido no header `Authorization`.
+
+### Registrar — `POST /auth/register`
+```json
+{
+  "name": "Ícaro Santos",
+  "email": "icaro@email.com",
+  "password": "senha123"
+}
+```
+
+**Resposta** `201 Created`
+```json
+{ "token": "eyJhbGciOiJIUzI1NiJ9..." }
+```
+
+### Login — `POST /auth/login`
+```json
+{
+  "email": "icaro@email.com",
+  "password": "senha123"
+}
+```
+
+**Resposta** `200 OK`
+```json
+{ "token": "eyJhbGciOiJIUzI1NiJ9..." }
+```
+
+### Usando o token
+
+```
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
+```
+
 ---
 
 ## 📡 Endpoints
 
-### Base URL: `/api/tasks`
+### Autenticação — `/auth`
 
-| Método | Endpoint | Descrição |
-|---|---|---|
-| `POST` | `/api/tasks` | Criar tarefa |
-| `GET` | `/api/tasks` | Listar todas as tarefas |
-| `GET` | `/api/tasks/{id}` | Buscar tarefa por ID |
-| `PUT` | `/api/tasks/{id}` | Atualizar tarefa |
-| `DELETE` | `/api/tasks/{id}` | Deletar tarefa |
-| `GET` | `/api/tasks/status/{status}` | Filtrar por status |
+| Método | Endpoint | Auth | Descrição |
+|---|---|---|---|
+| `POST` | `/auth/register` | Pública | Cria novo usuário |
+| `POST` | `/auth/login` | Pública | Autentica e retorna token |
+
+### Tarefas — `/tasks`
+
+| Método | Endpoint | Auth | Descrição |
+|---|---|---|---|
+| `POST` | `/tasks` | JWT | Criar tarefa |
+| `GET` | `/tasks` | JWT | Listar tarefas do usuário |
+| `GET` | `/tasks/{id}` | JWT | Buscar tarefa por ID |
+| `PUT` | `/tasks/{id}` | JWT | Atualizar tarefa |
+| `DELETE` | `/tasks/{id}` | JWT | Deletar tarefa |
+| `GET` | `/tasks/status/{status}` | JWT | Filtrar por status |
 
 ---
 
-### 📥 Exemplos de requisição
+### Exemplos de requisição
 
-**Criar tarefa** — `POST /api/tasks`
+**Criar tarefa** — `POST /tasks`
 ```json
 {
   "title": "Estudar Spring Boot",
-  "description": "Estudar sobre injeção de dependência e JPA",
+  "description": "Focar em injeção de dependência e JPA",
   "status": "IN_PROGRESS"
 }
 ```
 
-**Resposta** — `201 Created`
+**Resposta** `201 Created`
 ```json
 {
   "id": 1,
   "title": "Estudar Spring Boot",
-  "description": "Estudar sobre injeção de dependência e JPA",
+  "description": "Focar em injeção de dependência e JPA",
   "status": "IN_PROGRESS",
-  "createdAt": "2026-04-03T12:31:18",
-  "updatedAt": "2026-04-03T12:31:18"
+  "createdAt": "2026-07-11T12:31:18",
+  "updatedAt": "2026-07-11T12:31:18"
 }
-```
-
-**Atualizar status** — `PUT /api/tasks/1`
-```json
-{
-  "title": "Estudar Spring Boot",
-  "description": "Estudar sobre injeção de dependência e JPA",
-  "status": "COMPLETED"
-}
-```
-
-**Filtrar por status** — `GET /api/tasks/status/PENDING`
-```json
-[
-  {
-    "id": 2,
-    "title": "Criar testes unitários",
-    "description": null,
-    "status": "PENDING",
-    "createdAt": "2026-04-03T13:00:00",
-    "updatedAt": "2026-04-03T13:00:00"
-  }
-]
 ```
 
 ---
 
 ## 📊 Status das tarefas
 
-```
-PENDING      → Tarefa criada, aguardando início
-IN_PROGRESS  → Tarefa em andamento
-COMPLETED    → Tarefa concluída
-```
+| Status | Descrição |
+|---|---|
+| `PENDING` | Tarefa criada, aguardando início |
+| `IN_PROGRESS` | Tarefa em andamento |
+| `COMPLETED` | Tarefa concluída |
+
+---
+
+## 🗄️ Migrations (Flyway)
+
+| Versão | Descrição |
+|---|---|
+| `V1` | Criação da tabela `tasks` |
+| `V2` | Criação da tabela `users` |
+| `V3` | Adição de `user_id` em `tasks` (vínculo com usuário) |
 
 ---
 
 ## 🖥️ Interface Web
 
-O projeto conta com uma interface web moderna integrada à API, acessível diretamente pelo navegador.
+Interface web responsiva integrada à API, acessível direto pelo navegador.
 
-### Como acessar
-
-Com a aplicação rodando, abra no navegador:
-```
-http://localhost:8080/index.html
-```
-
-### Funcionalidades da interface
-
-- Criar tarefas com título, descrição e status
+**Funcionalidades:**
+- Login e cadastro de usuário
+- Dashboard com contadores por status
+- Criar, editar e deletar tarefas
 - Marcar tarefas como concluídas com um clique
-- Editar título e status inline
-- Deletar tarefas
-- Filtrar por status (Todas, Pendentes, Em progresso, Concluídas)
-- Métricas em tempo real por status
-- Indicador de conexão com a API
+- Filtrar por status via sidebar (desktop) ou barra inferior (mobile)
+- Dark mode / Light mode persistido no localStorage
 
-### Tecnologias
+**Tecnologias:** HTML5, CSS3 e JavaScript puro — sem frameworks. Servido pelo Spring Boot via `src/main/resources/static/`.
 
-HTML5, CSS3 e JavaScript puro — sem frameworks externos. Servido diretamente pelo Spring Boot via `src/main/resources/static/`.
+**Estrutura do frontend:**
+```
+static/
+├── index.html     → Estrutura HTML
+├── css/
+│   └── style.css  → Estilos e design tokens
+└── js/
+    ├── api.js     → Comunicação com a API (fetch + token)
+    ├── auth.js    → Login, registro e logout
+    ├── tasks.js   → CRUD de tarefas e renderização
+    └── app.js     → Inicialização, tema e controle de telas
+```
 
 ---
 
-## 🌿 Git Flow utilizado
+## 🐳 Docker
 
-```
-main
- └── feature/taskEntity-entity
- └── feature/taskEntity-service-dto
- └── feature/taskEntity-controller
- └── feature/frontend
-```
+Build em múltiplos estágios:
 
-Cada funcionalidade foi desenvolvida em uma branch separada e integrada à `main` via Pull Request
+1. **Build** — `maven:3.9-eclipse-temurin-21` compila e gera o `.jar`
+2. **Runtime** — `eclipse-temurin:21-jre` roda a aplicação em imagem enxuta
 
 ---
 
