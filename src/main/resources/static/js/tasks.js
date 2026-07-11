@@ -52,6 +52,7 @@ function updateCounts() {
 }
 
 function setView(view, btn) {
+    document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
     currentView = view;
 
     document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
