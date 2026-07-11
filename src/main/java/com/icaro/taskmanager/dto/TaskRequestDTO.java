@@ -2,16 +2,20 @@ package com.icaro.taskmanager.dto;
 
 import com.icaro.taskmanager.model.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-// Aqui é onde eu pego o que o meu usuário mandar na requisição
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TaskRequestDTO {
-    @NotBlank(message = "Title is required") // Aqui eu valido e garanto que não terá nenhum valor vazio
+    @NotBlank(message = "Title is required")
     private String title;
 
     private String description;
 
-    private TaskStatus status; // Aqui eu estou permitindo que o usuário mande um status para a task
-    // porém não estou tornando algo obrigatório
+    private TaskStatus status;
 }
