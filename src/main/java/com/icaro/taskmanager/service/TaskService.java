@@ -20,15 +20,14 @@ public class TaskService {
     private final UserRepository userRepository;
 
     public TaskResponseDTO create(TaskRequestDTO dto) {
-        var task = new TaskEntity();
-        task.setTitle(dto.getTitle());
-        task.setDescription(dto.getDescription());
-
-        task.setStatus(dto.getStatus() != null ? dto.getStatus() : TaskStatus.PENDING);
-
         var user = userRepository.findByEmail(getAuthenticatedEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        task.setUser(user);
+        var task = TaskEntity.builder()
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .status(dto.getStatus() != null ? dto.getStatus() : TaskStatus.PENDING)
+                .user(user)
+                .build();
         var saved = taskRepository.save(task);
         return toResponseDTO(saved);
     }
