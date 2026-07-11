@@ -67,8 +67,8 @@ src/main/java/com/icaro/taskmanager/
 
 ### 1. Clone o repositório
 ```bash
-git clone https://github.com/IcaroSantos21/task-manager-api.git
-cd task-manager-api
+git clone https://github.com/IcaroSantos21/taskEntity-manager-api.git
+cd taskEntity-manager-api
 ```
 
 ### 2. Crie o banco de dados
@@ -196,9 +196,9 @@ HTML5, CSS3 e JavaScript puro — sem frameworks externos. Servido diretamente p
 
 ```
 main
- └── feature/task-entity
- └── feature/task-service-dto
- └── feature/task-controller
+ └── feature/taskEntity-entity
+ └── feature/taskEntity-service-dto
+ └── feature/taskEntity-controller
  └── feature/frontend
 ```
 

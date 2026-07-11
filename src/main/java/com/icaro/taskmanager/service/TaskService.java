@@ -2,10 +2,12 @@ package com.icaro.taskmanager.service;
 
 import com.icaro.taskmanager.dto.TaskRequestDTO;
 import com.icaro.taskmanager.dto.TaskResponseDTO;
-import com.icaro.taskmanager.model.Task;
+import com.icaro.taskmanager.model.TaskEntity;
 import com.icaro.taskmanager.model.TaskStatus;
 import com.icaro.taskmanager.repository.TaskRepository;
+import com.icaro.taskmanager.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,73 +17,85 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
-    // Criando minha task, convertendo o DTO em Entity
     public TaskResponseDTO create(TaskRequestDTO dto) {
-        Task task = new Task();
+        var task = new TaskEntity();
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
 
-        // Aqui estou falando que SE não vier nenhum valor para status, ele deve ser PENDING
         task.setStatus(dto.getStatus() != null ? dto.getStatus() : TaskStatus.PENDING);
 
-        // Aqui é onde acontece o insert do banco de dados, o JPA gerencia isso
-        Task saved = taskRepository.save(task);
-        return toResponseDTO(saved); // Aqui é onde acontece a conversão
+        var user = userRepository.findByEmail(getAuthenticatedEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        task.setUser(user);
+        var saved = taskRepository.save(task);
+        return toResponseDTO(saved);
     }
 
-    // Aqui eu listo minha tabela
     public List<TaskResponseDTO> findAll() {
-        return taskRepository.findAll()
-                .stream() // busca no banco
-                .map(this::toResponseDTO) // transformo em lista
-                .collect(Collectors.toList()); // converte cada item
+        return taskRepository.findByUserEmail(getAuthenticatedEmail())
+                .stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
-    // Aqui eu estou buscando a task com base no id
+
     public TaskResponseDTO findById(Long id) {
-        Task task = taskRepository.findById(id) // Busca no banco de dados
-                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id)); // Lançando o erro caso não encotre o id
-        return toResponseDTO(task); // Retornando a task que encontrar
+        var task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+
+        if (!task.getUser().getEmail().equals(getAuthenticatedEmail())) {
+            throw new RuntimeException("Access denied");
+        }
+        return toResponseDTO(task);
     }
 
-    // Aqui eu estou atualizando uma tarefa na minha tabela
-    public TaskResponseDTO update(Long id, TaskRequestDTO dto) {
-        Task task = taskRepository.findById(id) // Busca no banco de dados
-                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id)); // Lançando a exceção caso não encontre a task
 
-        // Atualizando os campos
+    public TaskResponseDTO update(Long id, TaskRequestDTO dto) {
+        var task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+
+        if (!task.getUser().getEmail().equals(getAuthenticatedEmail())) {
+            throw new RuntimeException("Access denied");
+        }
+
         task.setTitle(dto.getTitle());
         task.setDescription(dto.getDescription());
         if (dto.getStatus() != null) task.setStatus(dto.getStatus());
 
-        return toResponseDTO(taskRepository.save(task)); // Salva novamente
+        return toResponseDTO(taskRepository.save(task));
     }
 
-    // Deletando a task pelo id
+
     public void delete(Long id) {
-        taskRepository.findById(id) // Procurando a task pelo id
-                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id)); // Lançando a exceção caso não tenha a tarefa
-        taskRepository.deleteById(id); // Essa linha deleta a tarefa do meu banco de dados
+        var task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+        if (!task.getUser().getEmail().equals(getAuthenticatedEmail())) {
+            throw new RuntimeException("Access denied");
+        }
+        taskRepository.deleteById(id);
     }
 
-    // Buscando com base no status da tarefa
     public List<TaskResponseDTO> findByStatus(TaskStatus status) {
-        return taskRepository.findByStatus(status)
-                .stream() // Busca no banco
+        return taskRepository.findByUserEmailAndStatus(getAuthenticatedEmail(), status)
+                .stream()
                 .map(this::toResponseDTO)
-                .collect(Collectors.toList()); // Transforma em tudo em lista
+                .collect(Collectors.toList());
     }
 
-    // Metodo privado de conversão (pattern: Mapper manual)
-    private TaskResponseDTO toResponseDTO(Task task) {
+    private TaskResponseDTO toResponseDTO(TaskEntity taskEntity) {
         TaskResponseDTO dto = new TaskResponseDTO();
-        dto.setId(task.getId());
-        dto.setTitle(task.getTitle());
-        dto.setDescription(task.getDescription());
-        dto.setStatus(task.getStatus());
-        dto.setCreatedAt(task.getCreatedAt());
-        dto.setUpdatedAt(task.getUpdatedAt());
+        dto.setId(taskEntity.getId());
+        dto.setTitle(taskEntity.getTitle());
+        dto.setDescription(taskEntity.getDescription());
+        dto.setStatus(taskEntity.getStatus());
+        dto.setCreatedAt(taskEntity.getCreatedAt());
+        dto.setUpdatedAt(taskEntity.getUpdatedAt());
         return dto;
+    }
+
+    private String getAuthenticatedEmail() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
