@@ -1,4 +1,6 @@
 package com.icaro.taskmanager.model;
 
-public class Role {
+public enum Role {
+    ROLE_ADMIN,
+    ROLE_USER
 }
