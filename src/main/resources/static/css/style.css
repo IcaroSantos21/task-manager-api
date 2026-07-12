@@ -568,34 +568,69 @@ select.field-input option { background: var(--surface); }
 ::-webkit-scrollbar-thumb:hover { background: var(--txt3); }
 
 /* ── RESPONSIVE ───────────────────────────────────────────── */
+
+/* Mobile: até 640px */
 @media (max-width: 640px) {
-    .sidebar { display: none; }
+    /* Layout base */
+    .sidebar {
+        display: none !important;
+    }
 
-    #app-screen { flex-direction: column; }
+    #app-screen {
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+    }
 
-    .main { padding: 1rem; gap: 1rem; padding-bottom: 80px; }
+    /* Main content */
+    .main {
+        padding: 1rem;
+        gap: 1rem;
+        padding-bottom: 80px;
+        overflow-y: auto;
+        flex: 1;
+    }
 
+    /* Header mobile */
     .main-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.75rem;
+        gap: 1rem;
     }
     .main-title { font-size: 18px; }
+    .main-subtitle { font-size: 12px; }
 
+    /* FAB Button */
     .btn-primary.fab {
         position: fixed;
-        bottom: 72px;
+        bottom: 80px;
         right: 1rem;
-        width: 48px;
-        height: 48px;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
         padding: 0;
+        display: flex;
+        align-items: center;
         justify-content: center;
         box-shadow: 0 4px 16px rgba(192,57,43,.4);
         z-index: 50;
     }
     .btn-primary.fab span { display: none; }
+    .btn-primary.fab svg { width: 24px; height: 24px; }
 
+    /* Task cards mobile */
+    .task-card {
+        padding: 1rem;
+        gap: 12px;
+        border-radius: 8px;
+    }
+    .task-title { font-size: 14px; }
+    .task-desc { font-size: 12px; margin-bottom: 6px; }
+    .task-meta { font-size: 11px; }
+    .task-actions { gap: 4px; }
+    .btn-icon { padding: 6px; }
+
+    /* Mobile bottom navigation */
     .mobile-nav {
         display: flex;
         position: fixed;
@@ -606,14 +641,18 @@ select.field-input option { background: var(--surface); }
         border-top: 1px solid var(--border);
         z-index: 50;
         padding: 0;
+        height: 70px;
+        box-shadow: 0 -2px 8px rgba(0,0,0,.1);
     }
+
     .mobile-nav-item {
         flex: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 3px;
-        padding: 10px 4px;
+        justify-content: center;
+        gap: 4px;
+        padding: 8px 4px;
         background: transparent;
         border: none;
         color: var(--txt3);
@@ -621,16 +660,118 @@ select.field-input option { background: var(--surface); }
         font-size: 10px;
         cursor: pointer;
         transition: color var(--transition);
-        border-top: 2px solid transparent;
+        border-top: 3px solid transparent;
+        min-height: 70px;
+        -webkit-tap-highlight-color: transparent;
     }
     .mobile-nav-item.active {
         color: var(--red);
         border-top-color: var(--red);
     }
-    .mobile-nav-item svg { width: 20px; height: 20px; }
+    .mobile-nav-item:active {
+        background: var(--surface2);
+    }
+    .mobile-nav-item svg { width: 24px; height: 24px; }
+
+    /* Modal mobile */
+    .modal-overlay {
+        padding: 1rem;
+        align-items: flex-end;
+    }
+    .modal {
+        max-width: 100%;
+        width: 100%;
+        max-height: 85vh;
+        overflow-y: auto;
+        border-radius: 12px 12px 0 0;
+    }
+    .modal-header {
+        padding: 1.25rem;
+        position: sticky;
+        top: 0;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+    }
+    .modal-title { font-size: 15px; }
+    .modal-body {
+        padding: 1.25rem;
+        gap: 1rem;
+    }
+    .modal-footer {
+        flex-direction: column-reverse;
+        gap: 8px;
+        padding: 1rem 1.25rem;
+        border-top: 1px solid var(--border);
+        position: sticky;
+        bottom: 0;
+        background: var(--surface);
+    }
+    .modal-footer button {
+        width: 100%;
+        min-height: 44px;
+        font-size: 14px;
+    }
+
+    /* Form fields mobile */
+    .field-input {
+        padding: 11px 14px;
+        font-size: 16px;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    .field-label { font-size: 11px; }
+
+    /* Auth screen mobile */
+    #auth-screen {
+        padding: 1.5rem 1rem;
+    }
+    .auth-container {
+        gap: 1.5rem;
+        max-width: 100%;
+    }
+    .auth-card {
+        box-shadow: 0 2px 8px rgba(0,0,0,.2);
+    }
+    .auth-form {
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+    .auth-brand { gap: 10px; }
+    .auth-title { font-size: 18px; }
+    .btn-primary.full {
+        min-height: 48px;
+        padding: 11px 16px;
+    }
+
+    /* Empty/Loading states */
+    .empty-state, .loading-state {
+        padding: 3rem 1.5rem;
+        font-size: 12px;
+    }
+    .empty-icon { font-size: 32px; }
+
+    /* Toast mobile */
+    .toast {
+        bottom: 80px;
+        left: 1rem;
+        right: 1rem;
+        transform: none;
+        white-space: normal;
+        font-size: 12px;
+    }
+
+    /* Prevent zoom on input focus */
+    input, textarea, select {
+        font-size: 16px !important;
+    }
 }
 
+/* Desktop: 641px+ */
 @media (min-width: 641px) {
-    .mobile-nav { display: none; }
-    .btn-primary.fab { display: none; }
+    .mobile-nav {
+        display: none !important;
+    }
+    .btn-primary.fab {
+        display: none !important;
+    }
 }

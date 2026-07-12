@@ -52,11 +52,24 @@ function updateCounts() {
 }
 
 function setView(view, btn) {
-    document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
     currentView = view;
 
+    // Remove active de todos os nav items
     document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.mobile-nav-item').forEach(b => b.classList.remove('active'));
+
+    // Adiciona active ao botão clicado
     btn.classList.add('active');
+
+    // Sincroniza o outro tipo de botão usando data-view
+    const view_attr = btn.getAttribute('data-view');
+    if (btn.classList.contains('nav-item')) {
+        const mobileBtn = document.querySelector(`.mobile-nav-item[data-view="${view_attr}"]`);
+        if (mobileBtn) mobileBtn.classList.add('active');
+    } else if (btn.classList.contains('mobile-nav-item')) {
+        const desktopBtn = document.querySelector(`.nav-item[data-view="${view_attr}"]`);
+        if (desktopBtn) desktopBtn.classList.add('active');
+    }
 
     const meta = VIEW_META[view] || VIEW_META['all'];
     document.getElementById('view-title').textContent    = meta.title;

@@ -81,38 +81,10 @@
           </svg>
         </div>
         <span class="sidebar-brand-name">TaskManager</span>
-        <!-- MOBILE NAV -->
-        <nav class="mobile-nav">
-          <button class="mobile-nav-item active" onclick="setView('all', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-              <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-            </svg>
-            Todas
-          </button>
-          <button class="mobile-nav-item" onclick="setView('PENDING', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-            </svg>
-            Pendentes
-          </button>
-          <button class="mobile-nav-item" onclick="setView('IN_PROGRESS', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-            </svg>
-            Progresso
-          </button>
-          <button class="mobile-nav-item" onclick="setView('COMPLETED', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-            Concluídas
-          </button>
-        </nav>
       </div>
 
       <nav class="sidebar-nav">
-        <button class="nav-item active" onclick="setView('all', this)">
+        <button class="nav-item active" data-view="all" onclick="setView('all', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
@@ -120,21 +92,21 @@
           <span>Todas as tarefas</span>
           <span class="nav-count" id="count-all">0</span>
         </button>
-        <button class="nav-item" onclick="setView('PENDING', this)">
+        <button class="nav-item" data-view="PENDING" onclick="setView('PENDING', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
           </svg>
           <span>Pendentes</span>
           <span class="nav-count" id="count-pending">0</span>
         </button>
-        <button class="nav-item" onclick="setView('IN_PROGRESS', this)">
+        <button class="nav-item" data-view="IN_PROGRESS" onclick="setView('IN_PROGRESS', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
           </svg>
           <span>Em progresso</span>
           <span class="nav-count" id="count-progress">0</span>
         </button>
-        <button class="nav-item" onclick="setView('COMPLETED', this)">
+        <button class="nav-item" data-view="COMPLETED" onclick="setView('COMPLETED', this)">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="20 6 9 17 4 12"/>
           </svg>
@@ -174,7 +146,7 @@
         <h2 class="main-title" id="view-title">Todas as tarefas</h2>
         <p class="main-subtitle" id="view-subtitle">Gerencie todas as suas tarefas</p>
       </div>
-      <button class="btn-primary fab" onclick="openModal()">
+      <button class="btn-primary" onclick="openModal()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
           <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
@@ -189,6 +161,35 @@
       </div>
     </div>
   </main>
+
+  <!-- MOBILE NAVIGATION -->
+  <nav class="mobile-nav">
+    <button class="mobile-nav-item active" data-view="all" onclick="setView('all', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+      <span>Todas</span>
+    </button>
+    <button class="mobile-nav-item" data-view="PENDING" onclick="setView('PENDING', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      <span>Pendentes</span>
+    </button>
+    <button class="mobile-nav-item" data-view="IN_PROGRESS" onclick="setView('IN_PROGRESS', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      </svg>
+      <span>Progresso</span>
+    </button>
+    <button class="mobile-nav-item" data-view="COMPLETED" onclick="setView('COMPLETED', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      <span>Concluídas</span>
+    </button>
+  </nav>
 </div>
 
 <!-- MODAL NOVA TAREFA -->
