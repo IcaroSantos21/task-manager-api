@@ -1,0 +1,44 @@
+= Task Manager API
+:doctype: book
+:icons: font
+:toc: left
+:toclevels: 3
+
+== Autenticação
+
+=== Registrar usuário
+
+==== Requisição
+include::{snippets}/auth-register/http-request.adoc[]
+
+==== Campos da requisição
+include::{snippets}/auth-register/request-fields.adoc[]
+
+==== Resposta
+include::{snippets}/auth-register/http-response.adoc[]
+
+=== Login
+
+==== Requisição
+include::{snippets}/auth-login/http-request.adoc[]
+
+==== Resposta
+include::{snippets}/auth-login/http-response.adoc[]
+
+== Tarefas
+
+=== Criar tarefa
+
+==== Requisição
+include::{snippets}/tasks-create/http-request.adoc[]
+
+==== Resposta
+include::{snippets}/tasks-create/http-response.adoc[]
+
+=== Listar tarefas
+
+==== Requisição
+include::{snippets}/tasks-list/http-request.adoc[]
+
+==== Resposta
+include::{snippets}/tasks-list/http-response.adoc[]
